@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -40,4 +41,37 @@ public class CategoryServiceImpl implements CategoryService {
             return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<CategoryResponseDTO> searchById(Long id) {
+      try {
+//          Category category = categoryRepository.findById(id).orElseThrow( () -> new RuntimeException("Category not found with id" + id ));
+          Optional<Category>  categoryOptional= categoryRepository.findById(id);
+          if (categoryOptional.isPresent()) {
+              CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                      .categories(List.of(categoryOptional.get()))
+                      .metadata(MetadataResponseDTO.message("Category retrieved successfully", HttpStatus.OK.value()))
+                      .build();
+              return new ResponseEntity<>(dto, HttpStatus.OK);
+          } else {
+              CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                      .categories(List.of())
+                      .metadata(MetadataResponseDTO.message("Category not found with id: " + id, HttpStatus.NOT_FOUND.value()))
+                      .build();
+                return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+          }
+      } catch (Exception e) {
+          CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                  .categories(List.of())
+                  .metadata(MetadataResponseDTO.message("An error occurred while retrieving the category: " +  e.getMessage(),
+                          HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                  .build();
+          return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+
+
+
+
 }
