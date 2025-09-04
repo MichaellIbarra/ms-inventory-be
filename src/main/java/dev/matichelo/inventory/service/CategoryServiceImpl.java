@@ -71,7 +71,26 @@ public class CategoryServiceImpl implements CategoryService {
     }
     }
 
+    @Override
+    @Transactional()
+    public ResponseEntity<CategoryResponseDTO> save(Category category) {
 
+            Category categorySave = categoryRepository.save(category);
+            if(categorySave != null){
+                CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                        .categories(List.of(categorySave))
+                        .metadata(MetadataResponseDTO.message("Category saved successfully", HttpStatus.OK.value()))
+                        .build();
+                return new ResponseEntity<>(dto, HttpStatus.CREATED);
+            } else{
+                CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                        .categories(List.of())
+                        .metadata(MetadataResponseDTO.message("Category could not be saved", HttpStatus.BAD_REQUEST.value()))
+                        .build();
+                return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+            }
+
+    }
 
 
 }
