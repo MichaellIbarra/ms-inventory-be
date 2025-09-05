@@ -72,7 +72,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public ResponseEntity<CategoryResponseDTO> save(Category category) {
 
             Category categorySave = categoryRepository.save(category);
@@ -90,6 +90,29 @@ public class CategoryServiceImpl implements CategoryService {
                 return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
             }
 
+    }
+
+    @Override
+    public ResponseEntity<CategoryResponseDTO> update(Long id, Category category) {
+
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        if(categoryOptional.isPresent()){
+            Category categoryUpdate = categoryOptional.get();
+            categoryUpdate.setName(category.getName());
+            categoryUpdate.setDescription(category.getDescription());
+            categoryRepository.save(categoryUpdate);
+            CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                    .categories(List.of(categoryUpdate))
+                    .metadata(MetadataResponseDTO.message("Category updated successfully", HttpStatus.OK.value()))
+                    .build();
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } else {
+            CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                    .categories(List.of())
+                    .metadata(MetadataResponseDTO.message("Category not found with id: " + id, HttpStatus.NOT_FOUND.value()))
+                    .build();
+            return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+        }
     }
 
 

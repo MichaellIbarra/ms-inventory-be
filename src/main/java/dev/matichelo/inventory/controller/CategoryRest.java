@@ -27,13 +27,34 @@ public class CategoryRest {
         return  categoryService.search();
     }
 
+    /***
+     * Método para buscar una categoría por su ID
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponseDTO> searchCategoryById(@PathVariable Long id){
         return categoryService.searchById(id);
     }
 
+    /***
+     * Método para crear una nueva categoría
+     * @param category
+     * @return
+     */
     @PostMapping
     public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody Category category){
         return categoryService.save(category);
+    }
+
+    /***
+     * Método para actualizar una categoría existente
+     * @param id
+     * @param category
+     * @return
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id , @RequestBody Category category){
+        return categoryService.update(id, category);
     }
 }
