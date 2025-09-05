@@ -57,4 +57,9 @@ public class CategoryRest {
     public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id , @RequestBody Category category){
         return categoryService.update(id, category);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CategoryResponseDTO> deleteCategory(@PathVariable Long id){
+        return categoryService.delete(id);
+    }
 }

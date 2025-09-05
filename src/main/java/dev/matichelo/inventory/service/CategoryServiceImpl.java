@@ -115,5 +115,25 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<CategoryResponseDTO> delete(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        if(categoryOptional.isPresent()){
+            categoryRepository.deleteById(id);
+            CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                    .categories(List.of())
+                    .metadata(MetadataResponseDTO.message("Category deleted successfully", HttpStatus.OK.value()))
+                    .build();
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } else {
+            CategoryResponseDTO dto = CategoryResponseDTO.builder()
+                    .categories(List.of())
+                    .metadata(MetadataResponseDTO.message("Category not found with id: " + id, HttpStatus.NOT_FOUND.value()))
+                    .build();
+            return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }

@@ -9,5 +9,6 @@ public interface CategoryService {
     ResponseEntity<CategoryResponseDTO> searchById(Long id);
     ResponseEntity<CategoryResponseDTO> save(Category category);
     ResponseEntity<CategoryResponseDTO> update(Long id, Category category);
+    ResponseEntity<CategoryResponseDTO> delete(Long id);
 
 }
