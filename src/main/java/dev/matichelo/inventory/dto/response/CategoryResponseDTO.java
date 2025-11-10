@@ -12,5 +12,5 @@ import java.util.List;
 @Builder
 public class CategoryResponseDTO {
     private MetadataResponseDTO metadata;
-    private List<Category> categories;
+    private List<Category> data;
 }

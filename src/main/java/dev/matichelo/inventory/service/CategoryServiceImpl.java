@@ -29,13 +29,13 @@ public class CategoryServiceImpl implements CategoryService {
 //             if (true) throw new RuntimeException("Intentional error for testing");
             List<Category> categories = categoryRepository.findAll();
             CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                            .categories(categories)
+                            .data(categories)
                                     .metadata(MetadataResponseDTO.message("Categories retrieved successfully", HttpStatus.OK.value()))
                                             .build();
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (Exception e) {
             CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                            .categories(List.of())
+                            .data(List.of())
                                     .metadata(MetadataResponseDTO.message("An error occurred while retrieving categories: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()))
                                             .build();
             return new ResponseEntity<>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,20 +50,20 @@ public class CategoryServiceImpl implements CategoryService {
           Optional<Category>  categoryOptional= categoryRepository.findById(id);
           if (categoryOptional.isPresent()) {
               CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                      .categories(List.of(categoryOptional.get()))
+                      .data(List.of(categoryOptional.get()))
                       .metadata(MetadataResponseDTO.message("Category retrieved successfully", HttpStatus.OK.value()))
                       .build();
               return new ResponseEntity<>(dto, HttpStatus.OK);
           } else {
               CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                      .categories(List.of())
+                      .data(List.of())
                       .metadata(MetadataResponseDTO.message("Category not found with id: " + id, HttpStatus.NOT_FOUND.value()))
                       .build();
                 return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
           }
       } catch (Exception e) {
           CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                  .categories(List.of())
+                  .data(List.of())
                   .metadata(MetadataResponseDTO.message("An error occurred while retrieving the category: " +  e.getMessage(),
                           HttpStatus.INTERNAL_SERVER_ERROR.value()))
                   .build();
@@ -78,13 +78,13 @@ public class CategoryServiceImpl implements CategoryService {
             Category categorySave = categoryRepository.save(category);
             if(categorySave != null){
                 CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                        .categories(List.of(categorySave))
+                        .data(List.of(categorySave))
                         .metadata(MetadataResponseDTO.message("Category saved successfully", HttpStatus.OK.value()))
                         .build();
                 return new ResponseEntity<>(dto, HttpStatus.CREATED);
             } else{
                 CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                        .categories(List.of())
+                        .data(List.of())
                         .metadata(MetadataResponseDTO.message("Category could not be saved", HttpStatus.BAD_REQUEST.value()))
                         .build();
                 return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
@@ -102,13 +102,13 @@ public class CategoryServiceImpl implements CategoryService {
             categoryUpdate.setDescription(category.getDescription());
             categoryRepository.save(categoryUpdate);
             CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                    .categories(List.of(categoryUpdate))
+                    .data(List.of(categoryUpdate))
                     .metadata(MetadataResponseDTO.message("Category updated successfully", HttpStatus.OK.value()))
                     .build();
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                    .categories(List.of())
+                    .data(List.of())
                     .metadata(MetadataResponseDTO.message("Category not found with id: " + id, HttpStatus.NOT_FOUND.value()))
                     .build();
             return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
@@ -122,13 +122,13 @@ public class CategoryServiceImpl implements CategoryService {
         if(categoryOptional.isPresent()){
             categoryRepository.deleteById(id);
             CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                    .categories(List.of())
+                    .data(List.of())
                     .metadata(MetadataResponseDTO.message("Category deleted successfully", HttpStatus.OK.value()))
                     .build();
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             CategoryResponseDTO dto = CategoryResponseDTO.builder()
-                    .categories(List.of())
+                    .data(List.of())
                     .metadata(MetadataResponseDTO.message("Category not found with id: " + id, HttpStatus.NOT_FOUND.value()))
                     .build();
             return new ResponseEntity<>(dto, HttpStatus.NOT_FOUND);
